@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package ticket;
+
+option go_package = "gRPC/proto/ticket";
+
+import "google/protobuf/timestamp.proto";
+
+// Ticket message definition
+message Ticket {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  TicketStatus status = 4;
+  TicketPriority priority = 5;
+  string assignee_id = 6;
+  repeated string tags = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+// Enums
+enum TicketStatus {
+  TICKET_STATUS_UNSPECIFIED = 0;
+  TICKET_STATUS_OPEN = 1;
+  TICKET_STATUS_IN_PROGRESS = 2;
+  TICKET_STATUS_RESOLVED = 3;
+  TICKET_STATUS_CLOSED = 4;
+}
+
+enum TicketPriority {
+  TICKET_PRIORITY_UNSPECIFIED = 0;
+  TICKET_PRIORITY_LOW = 1;
+  TICKET_PRIORITY_MEDIUM = 2;
+  TICKET_PRIORITY_HIGH = 3;
+  TICKET_PRIORITY_CRITICAL = 4;
+}
+
+// Request/Response messages
+message CreateTicketRequest {
+  string title = 1;
+  string description = 2;
+  TicketPriority priority = 3;
+  string assignee_id = 4;
+  repeated string tags = 5;
+  string reporter_id = 6;
+}
+
+message CreateTicketResponse {
+  Ticket ticket = 1;
+}
+
+message GetTicketRequest {
+  string id = 1;
+}
+
+message GetTicketResponse {
+  Ticket ticket = 1;
+}
+
+message ListTicketsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListTicketsResponse {
+  repeated Ticket tickets = 1;
+  string next_page_token = 2;
+}
+
+message UpdateTicketRequest {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  TicketStatus status = 4;
+  TicketPriority priority = 5;
+  string assignee_id = 6;
+  repeated string tags = 7;
+}
+
+message UpdateTicketResponse {
+  Ticket ticket = 1;
+}
+
+message DeleteTicketRequest {
+  string id = 1;
+}
+
+message DeleteTicketResponse {
+  bool success = 1;
+}
+
+// Service definition
+service TicketService {
+  rpc CreateTicket(CreateTicketRequest) returns (CreateTicketResponse);
+  rpc GetTicket(GetTicketRequest) returns (GetTicketResponse);
+  rpc ListTickets(ListTicketsRequest) returns (ListTicketsResponse);
+  rpc UpdateTicket(UpdateTicketRequest) returns (UpdateTicketResponse);
+  rpc DeleteTicket(DeleteTicketRequest) returns (DeleteTicketResponse);
+} 

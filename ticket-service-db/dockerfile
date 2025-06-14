@@ -1,0 +1,43 @@
+FROM golang:1.23.2-alpine AS builder
+
+# Install protoc and protoc-gen-go
+RUN apk add --no-cache protobuf-dev
+RUN go install google.golang.org/protobuf/protoc-gen-go@latest
+RUN go install google.golang.org/grpc/protoc-gen-go-grpc@latest
+
+WORKDIR /app
+
+# Copy go mod files
+COPY go.mod go.sum ./
+
+# Copy all source directories
+COPY database/ ./database/
+COPY proto/ ./proto/
+COPY ticket-service-db/ ./ticket-service-db/
+
+# Download dependencies
+RUN go mod download
+
+# Generate protobuf files with correct import paths
+RUN protoc --go_out=. --go-grpc_out=. \
+    --go_opt=module=gRPC --go-grpc_opt=module=gRPC \
+    proto/ticket.proto
+
+# List generated files for debugging
+RUN ls -la proto/
+
+# Build from the module root (where go.mod is)
+# Specify the path to the main package
+RUN go build -o grpc-server ./ticket-service-db
+
+FROM gcr.io/distroless/base-debian10
+
+WORKDIR /
+
+# Copy the binary from the build location
+
+COPY --from=builder /app/grpc-server /grpc-server
+
+EXPOSE 50051
+
+CMD ["/grpc-server"]

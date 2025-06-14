@@ -1,0 +1,30 @@
+services:
+  grpc-server:
+    build:
+      context: .
+      dockerfile: ticket-service-db/Dockerfile
+    ports:
+      - "50051:50051"
+    depends_on:
+      - ticket_db
+    environment:
+      DB_HOST: ticket_db
+      DB_PORT: 5432
+      DB_USER: ayushpandya
+      DB_PASSWORD: postgres
+      DB_NAME: ticketdb
+      DB_SSLMODE: disable
+  ticket_db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ayushpandya
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ticketdb
+    volumes:
+      - ticket_db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  ticket_db:
