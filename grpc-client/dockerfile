@@ -13,7 +13,7 @@ COPY go.mod go.sum ./
 # Copy all source directories
 COPY database/ ./database/
 COPY proto/ ./proto/
-COPY ticket-service-db/ ./ticket-service-db/
+COPY grpc-client/ ./grpc-client/
 
 # Download dependencies
 RUN go mod download
@@ -28,7 +28,7 @@ RUN ls -la proto/
 
 # Build from the module root (where go.mod is)
 # Specify the path to the main package
-RUN go build -o grpc-server ./ticket-service-db
+RUN go build -o grpc-server ./grpc-client
 
 FROM gcr.io/distroless/base-debian10
 
@@ -38,6 +38,6 @@ WORKDIR /
 
 COPY --from=builder /app/grpc-server /grpc-server
 
-EXPOSE 50051
+EXPOSE 50052
 
 CMD ["/grpc-server"]

@@ -25,6 +25,14 @@ services:
     volumes:
       - ticket_db:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  grpc-client:
+    build:
+      context: .
+      dockerfile: grpc-client/Dockerfile
+    ports:
+      - "50052:50052"
+    depends_on:
+      - grpc-server
 
 volumes:
   ticket_db:
