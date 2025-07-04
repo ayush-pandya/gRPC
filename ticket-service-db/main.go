@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	"gRPC/database"
-	ticketpb "gRPC/proto/ticket"
+	"github.com/ayush-pandya/gRPC/database"
+	ticketpb "github.com/ayush-pandya/gRPC/proto/ticket"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
