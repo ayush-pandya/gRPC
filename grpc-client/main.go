@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	ticketpb "gRPC/proto/ticket"
+	ticketpb "github.com/ayush-pandya/gRPC/proto/ticket"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
