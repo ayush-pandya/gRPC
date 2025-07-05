@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package ticket;
 
-option go_package = "github.com/ayush-pandya/gRPC/proto/ticket";
+option go_package = "github.com/ayush-pandya/grpc/proto/ticket";
 
 import "google/protobuf/timestamp.proto";
 

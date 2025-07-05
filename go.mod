@@ -1,4 +1,4 @@
-module github.com/ayush-pandya/gRPC
+module github.com/ayush-pandya/grpc
 
 go 1.23.2
 
